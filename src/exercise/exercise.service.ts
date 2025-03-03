@@ -3,6 +3,7 @@ import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Exercise } from './exercise.model';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class ExercisesService {
@@ -24,12 +25,18 @@ export class ExercisesService {
     return `This action returns a #${id} exercise`;
   }
 
-  update(id: number, updateExerciseDto: UpdateExerciseDto) {
-    return `This action updates a #${id} exercise`;
+  async update(uuid: string, updateExerciseDto: UpdateExerciseDto) {
+    const exercise = await this.exerciseRepository.findByPk(uuid)
+    if (!exercise) {
+      throw new NotFoundException(`Упражнение с таким uuid=${uuid} не найдено`)
+    }
+    await exercise.update(updateExerciseDto)
+    return exercise
   }
 
   async removeOne(uuid: string) {
     const exercise = await this.exerciseRepository.findByPk(uuid);
+    console.log(exercise);
     if (!exercise) {
       throw new NotFoundException(`Упражнение с таким uuid:${uuid} не найдено`);
     }

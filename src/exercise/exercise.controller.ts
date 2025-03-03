@@ -26,9 +26,9 @@ export class ExercisesController {
     return this.exercisesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExerciseDto: UpdateExerciseDto) {
-    return this.exercisesService.update(+id, updateExerciseDto);
+  @Patch(':uuid')
+  update(@Param('uuid') uuid: string, @Body() updateExerciseDto: UpdateExerciseDto) {
+    return this.exercisesService.update(uuid, updateExerciseDto);
   }
 
   @ApiOperation({summary: 'Удаление упражнения из базы'})
