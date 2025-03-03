@@ -19,8 +19,8 @@ export class WorkoutsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.workoutsService.findOne(+id);
+  findOne(@Param('id') uuid: string) {
+    return this.workoutsService.findOne(uuid);
   }
 
   @Patch(':id')
@@ -28,8 +28,9 @@ export class WorkoutsController {
     return this.workoutsService.update(+id, updateWorkoutDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.workoutsService.remove(+id);
+  @Delete(':uuid')
+  async remove(@Param('uuid') uuid: string) {
+    const result = await this.workoutsService.remove(uuid)
+    return {message: 'Тренировка успешно удалена', data: result}
   }
 }

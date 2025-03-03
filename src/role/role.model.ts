@@ -10,16 +10,18 @@ interface RoleCreationAttr {
 
 @Table({ tableName: 'roles' })
 export class Role extends Model<Role, RoleCreationAttr> {
-  @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
+  @ApiProperty({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'UUID',
+  })
   @Column({
-    type: DataType.INTEGER,
-    unique: true,
-    autoIncrement: true,
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
     primaryKey: true,
   })
-  id: number;
+  uuid: string;
 
-  @ApiProperty({ example: 'ADMIN', description: 'Унеикальное значение роли' })
+  @ApiProperty({ example: 'ADMIN', description: 'Уникальное значение роли' })
   @Column({
     type: DataType.STRING,
     unique: true,

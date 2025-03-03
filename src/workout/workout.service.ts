@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Workout } from './workout.model';
 import { WorkoutExercise } from 'src/workout-exercise/workout-exercise.model';
+import { Exercise } from 'src/exercise/exercise.model';
 
 @Injectable()
 export class WorkoutsService {
@@ -40,19 +41,35 @@ export class WorkoutsService {
     }
   }
 
-  findAll() {
-    return `This action returns all workouts`;
+  async findAll() {
+    const workouts = await this.workoutRepository.findAll({
+      include: [{
+        model: WorkoutExercise,
+        as: 'exercises',
+      }]
+    });
+    return workouts;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} workout`;
+  findOne(uuid: string) {
+    const workout = this.workoutRepository.findOne({ where: { uuid } });
+    return workout;
   }
 
   update(id: number, updateWorkoutDto: UpdateWorkoutDto) {
     return `This action updates a #${id} workout`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} workout`;
+ async remove(uuid: string) {
+
+const workout = await this.workoutRepository.findByPk(uuid)
+
+if (!workout){
+  throw new NotFoundException(`Тренировка с ${uuid} не найдена`)
+}
+
+await this.workoutRepository.destroy({where: {uuid}})
+
+return workout
   }
 }

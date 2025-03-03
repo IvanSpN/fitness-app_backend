@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Model, Table, DataType } from 'sequelize-typescript';
+import { Column, Model, Table, DataType, HasMany } from 'sequelize-typescript';
+import { WorkoutExercise } from 'src/workout-exercise/workout-exercise.model';
 
 interface ExercisesCreationAttr {
   name: string;
@@ -41,4 +42,8 @@ export class Exercise extends Model<Exercise, ExercisesCreationAttr> {
   })
   @Column({ type: DataType.BOOLEAN, allowNull: false })
   isWeight: boolean;
+
+  @HasMany(()=> WorkoutExercise)
+  WorkoutExercise: WorkoutExercise[]
+
 }

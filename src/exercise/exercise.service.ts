@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -28,7 +28,13 @@ export class ExercisesService {
     return `This action updates a #${id} exercise`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} exercise`;
+  async removeOne(uuid: string) {
+    const exercise = await this.exerciseRepository.findByPk(uuid);
+    if (!exercise) {
+      throw new NotFoundException(`Упражнение с таким uuid:${uuid} не найдено`);
+    }
+
+    await exercise.destroy();
+    return exercise;
   }
 }

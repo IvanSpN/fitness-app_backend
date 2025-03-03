@@ -59,14 +59,15 @@ export class WorkoutExercise extends Model<
   weight: number;
 
   @ForeignKey(() => Workout)
-  @Column(DataType.UUID)
+  @Column({ type: DataType.UUID, allowNull: false })
   workout_uuid: string;
-  @BelongsTo(() => Workout)
+  @BelongsTo(() => Workout, {onDelete: 'CASCADE'})
   workout: Workout;
 
   @ForeignKey(() => Exercise)
-  @Column(DataType.UUID)
+  @Column({ type: DataType.UUID, allowNull: false })
   exercise_uuid: string;
+
   @BelongsTo(() => Exercise)
-  exercise: Exercise;
+  exercises: Exercise;
 }
