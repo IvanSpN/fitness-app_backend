@@ -28,6 +28,4 @@ export class CreateExerciseDto {
     description: 'Вес используемый для отягощения',
   })
   readonly weight: number;
-
- 
 }

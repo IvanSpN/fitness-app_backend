@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { WorkoutsService } from './workout.service';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
-import { CreateWorkoutExerciseDto } from 'src/workout-exercise/dto/create-workout-exercise.dto';
+import { skipWorkout } from './dto/skipWorkout.dto';
 
 @Controller('workouts')
 export class WorkoutsController {
@@ -24,8 +24,12 @@ export class WorkoutsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWorkoutDto: UpdateWorkoutDto) {
-    return this.workoutsService.update(+id, updateWorkoutDto);
+  update(@Param('uuid') uuid: string, @Body() updateWorkoutDto: UpdateWorkoutDto) {
+    return this.workoutsService.update(uuid, updateWorkoutDto);
+  }
+  @Patch(':uuid/toggle-skip')
+  skipWorkout(@Param('uuid') uuid: string,) {
+    return this.workoutsService.markSkipWorkout(uuid)
   }
 
   @Delete(':uuid')

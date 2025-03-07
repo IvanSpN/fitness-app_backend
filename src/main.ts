@@ -18,8 +18,8 @@ async function bootstrap() {
     // Включение CORS
   app.enableCors({
     origin: 'http://localhost:5173',
-    methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type, Authorization', 
+    methods: 'GET,POST,PUT,DELETE,PATCH',
+    allowedHeaders: 'Content-Type, Authorization',
   });
 
   const document = SwaggerModule.createDocument(app, config);

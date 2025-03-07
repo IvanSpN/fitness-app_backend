@@ -43,10 +43,19 @@ export class WorkoutsService {
 
   async findAll() {
     const workouts = await this.workoutRepository.findAll({
-      include: [{
-        model: WorkoutExercise,
-        as: 'exercises',
-      }]
+      include: [
+        {
+          association: 'exercises',
+          attributes: ['uuid', 'sets', 'reps', 'weight', 'exercise_uuid'],
+          include: [
+            {
+              association: 'exercise',
+              attributes: ['name'],
+              paranoid: false,
+            },
+          ],
+        },
+      ],
     });
     return workouts;
   }
@@ -56,20 +65,30 @@ export class WorkoutsService {
     return workout;
   }
 
-  update(id: number, updateWorkoutDto: UpdateWorkoutDto) {
+  update(id: string, updateWorkoutDto: UpdateWorkoutDto) {
     return `This action updates a #${id} workout`;
   }
 
- async remove(uuid: string) {
+  async remove(uuid: string) {
+    const workout = await this.workoutRepository.findByPk(uuid);
 
-const workout = await this.workoutRepository.findByPk(uuid)
+    if (!workout) {
+      throw new NotFoundException(`Тренировка с ${uuid} не найдена`);
+    }
 
-if (!workout){
-  throw new NotFoundException(`Тренировка с ${uuid} не найдена`)
-}
+    await this.workoutRepository.destroy({ where: { uuid } });
 
-await this.workoutRepository.destroy({where: {uuid}})
+    return workout;
+  }
 
-return workout
+  async markSkipWorkout(uuid: string) {
+    const workout = await this.workoutRepository.findByPk(uuid);
+    if (!workout) {
+      throw new NotFoundException(`Тренировка с uuid=${uuid} не найдена`);
+    }
+
+    workout.isSkip = !workout.isSkip;
+    await workout.save();
+    return workout;
   }
 }

@@ -25,7 +25,7 @@ export class WorkoutExercise extends Model<
 > {
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-446655440000',
-    description: 'UUID',
+    description: 'UUID упражнения',
   })
   @Column({
     type: DataType.UUID,
@@ -34,7 +34,14 @@ export class WorkoutExercise extends Model<
   })
   uuid: string;
 
-  @ApiProperty({ example: 'Отжимания', description: 'Название упражнения' })
+  // @ApiProperty({ example: 'Отжимания', description: 'Название упражнения' })
+  // @Column({
+  //   type: DataType.STRING,
+  //   allowNull: false,
+  // })
+  // name: string;
+
+  @ApiProperty({ example: '5', description: 'Количество подходов в упражнении' })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -42,8 +49,8 @@ export class WorkoutExercise extends Model<
   sets: number;
 
   @ApiProperty({
-    example: 'С собственным весом',
-    description: 'Тип упражнения',
+    example: '10',
+    description: 'Количество повторов в упражнении',
   })
   @Column({
     type: DataType.INTEGER,
@@ -52,8 +59,8 @@ export class WorkoutExercise extends Model<
   reps: number;
 
   @ApiProperty({
-    example: 'true',
-    description: 'Определяет с отягощением упражнение или нет',
+    example: '100',
+    description: 'Вес используемый в упражнении с отягощением',
   })
   @Column({ type: DataType.INTEGER, allowNull: false })
   weight: number;
@@ -69,5 +76,5 @@ export class WorkoutExercise extends Model<
   exercise_uuid: string;
 
   @BelongsTo(() => Exercise)
-  exercises: Exercise;
+  exercise: Exercise;
 }

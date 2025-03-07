@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Column, Model, Table, DataType, HasMany } from 'sequelize-typescript';
 import { WorkoutExercise } from 'src/workout-exercise/workout-exercise.model';
 
-interface WorkoutCreationAttr {
+export interface WorkoutCreationAttr {
   uuid: string;
   user_uuid: string;
   type: string;
@@ -10,9 +10,11 @@ interface WorkoutCreationAttr {
   date: string;
   isSkip: boolean;
   isDone: boolean;
+  deletedAt: null | Date;
+
 }
 
-@Table({ tableName: 'workouts' })
+@Table({ tableName: 'workouts', paranoid: true })
 export class Workout extends Model<WorkoutCreationAttr> {
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-446655440000',
@@ -75,6 +77,13 @@ export class Workout extends Model<WorkoutCreationAttr> {
   })
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
   isDone: boolean;
+
+  @ApiProperty({
+    example: '12.12.2025',
+    description: 'Дата удаления пользователем упражнения',
+  })
+  @Column({ type:  DataType.DATE, allowNull: true })
+  deletedAt: Date;
 
   @HasMany(()=> WorkoutExercise, {onDelete: 'CASCADE'})
   exercises: WorkoutExercise[]

@@ -36,7 +36,6 @@ export class ExercisesService {
 
   async removeOne(uuid: string) {
     const exercise = await this.exerciseRepository.findByPk(uuid);
-    console.log(exercise);
     if (!exercise) {
       throw new NotFoundException(`Упражнение с таким uuid:${uuid} не найдено`);
     }

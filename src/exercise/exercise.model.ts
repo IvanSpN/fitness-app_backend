@@ -6,9 +6,10 @@ interface ExercisesCreationAttr {
   name: string;
   type: string;
   isWeight: boolean;
+  deletedAt: null | Date;
 }
 
-@Table({ tableName: 'exercises' })
+@Table({ tableName: 'exercises', paranoid: true })
 export class Exercise extends Model<Exercise, ExercisesCreationAttr> {
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'UUID' })
   @Column({
@@ -42,6 +43,13 @@ export class Exercise extends Model<Exercise, ExercisesCreationAttr> {
   })
   @Column({ type: DataType.BOOLEAN, allowNull: false })
   isWeight: boolean;
+
+  @ApiProperty({
+    example: '12.12.2025',
+    description: 'Дата удаления пользователем упражнения',
+  })
+  @Column({ type:  DataType.DATE, allowNull: true })
+  deletedAt: Date;
 
   @HasMany(()=> WorkoutExercise)
   WorkoutExercise: WorkoutExercise[]
